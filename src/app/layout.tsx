@@ -1,40 +1,45 @@
-import type { Metadata } from "next";
-import localFont from "next/font/local";
-import "./globals.css";
-import {ClerkProvider} from "@clerk/nextjs";
+import { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import { ThemeProvider } from '@/components/theme-provider'
+import { Header } from '@/components/header'
+import Footer from '@/components/footer'
+
+
+import './globals.css'
 import React from "react";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: "Ecomm App",
-  description: "Spend your money here cuz we care",
-};
+    title: {
+        default: 'ShopVerse',
+        template: '%s | ShopVerse',
+    },
+    description: 'Discover our handcrafted desk accessories and office essentials.',
+    icons: {
+        icon: '/logos/tree-rings.svg',
+    }
+}
 
 export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
+                                       children,
+                                   }: Readonly<{
+    children: React.ReactNode
 }>) {
-  return (
-      <ClerkProvider>
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-
-        {children}
-      </body>
-    </html>
-      </ClerkProvider>
-  );
+    return (
+        <html lang="en" suppressHydrationWarning>
+        <body className={`${inter.className} flex flex-col min-h-screen`}>
+        <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+        >
+            <Header/>
+            <main className="flex-grow">{children}</main>
+            <Footer/>
+        </ThemeProvider>
+        </body>
+        </html>
+    )
 }
